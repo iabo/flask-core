@@ -16,6 +16,6 @@ ma = Marshmallow(app)
 
 @app.route('/', methods=['POST'])  #https://api.indevs.site/
 def home():
-  return "hello World"
+	return "hello World"
 
 app.run()
