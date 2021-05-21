@@ -18,4 +18,6 @@ ma = Marshmallow(app)
 def home():
   return "hello World"
 
-app.run()
+# Run Server
+if __name__ == '__main__':
+  app.run(debug=True)
