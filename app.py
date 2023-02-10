@@ -1,23 +1,21 @@
-from flask import Flask, request, jsonify
-from flask_sqlalchemy import SQLAlchemy 
-from flask_marshmallow import Marshmallow 
-import os
+from flask import Flask
+from flask_restful import Api
+from flask_jwt import JWT
 
-# Init app
+from security import authenticate, identity
+from user import UserRegister
+from item import Item, ItemList
+
 app = Flask(__name__)
-basedir = os.path.abspath(os.path.dirname(__file__))
-# Database
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'db.sqlite')
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-# Init db
-db = SQLAlchemy(app)
-# Init ma
-ma = Marshmallow(app)
+app.config['PROPAGATE_EXCEPTIONS'] = True
+app.secret_key = 'jose'
+api = Api(app)
 
-@app.route('/', methods=['POST'])  #https://api.indevs.site/
-def home():
-  return "hello World"
+jwt = JWT(app, authenticate, identity)
 
-# Run Server
-if __name__ == '__main__':
-  app.run(debug=True)
+api.add_resource(Item, '/item/<string:name>')
+api.add_resource(ItemList, '/items')
+api.add_resource(UserRegister, '/register')
+
+#if __name__ == '__main__':
+#    app.run(debug=True)  # important to mention debug=True
